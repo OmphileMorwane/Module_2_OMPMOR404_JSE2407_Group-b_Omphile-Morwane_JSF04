@@ -3,6 +3,9 @@ import './style.css'
 import App from './App.vue'
 import router from './components/router'
 import store from './components/store'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
 
 /**
  * Creates and mounts the Vue application.
