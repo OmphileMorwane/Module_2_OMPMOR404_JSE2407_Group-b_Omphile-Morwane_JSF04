@@ -9,6 +9,7 @@ export default createStore({
     sortOrder: '',
     loading: true,
     error: null,
+    theme: 'light',
   },
   mutations: {
     setProducts(state, products) {
@@ -28,6 +29,10 @@ export default createStore({
     },
     setError(state, error) {
       state.error = error;
+    },
+
+    toggleTheme(state) {
+      state.theme = state.theme === 'light' ? 'dark' : 'light';
     },
   },
   actions: {
@@ -70,5 +75,10 @@ export default createStore({
 
       return result;
     },
+
+    // Add getter to retrieve the current theme
+    theme(state) {
+      return state.theme;
   },
+},
 });
