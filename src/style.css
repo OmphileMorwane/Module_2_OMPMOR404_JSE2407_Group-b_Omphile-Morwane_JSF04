@@ -59,6 +59,8 @@ html, body {
   background-color: #0befb6;
  }
 
+ /* Styling for Product detail */
+
  main {
    display: flex;
    flex-direction: column;
@@ -233,7 +235,7 @@ html, body {
    border-radius: 4px;
    font-size: 0.875rem;
  }
- 
+ /* Product Card Styling */
       .product-card {
         border: 1px solid #ccc;
         padding: 30px;
