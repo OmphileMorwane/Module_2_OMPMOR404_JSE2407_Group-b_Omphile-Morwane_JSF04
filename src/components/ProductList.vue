@@ -38,22 +38,6 @@
           :product="product"
         />
       </div>
-
-      <div :class="theme">
-        <button
-          @click="toggleTheme"
-          style="
-            position: relative;
-            z-index: 9999;
-            background-color: red;
-            color: white;
-          "
-        >
-          {{
-            theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"
-          }}
-        </button>
-      </div>
     </div>
   </div>
 
@@ -99,8 +83,6 @@ export default {
       () => store.getters.filteredAndSortedProducts
     );
 
-    const theme = computed(() => store.state.theme);
-
     /**
      * Filters the products by the selected category.
      */
@@ -110,13 +92,6 @@ export default {
 
     const sortProducts = () => {
       // No need to update the state here as v-model does that
-    };
-
-    /**
-     * Toggles between light and dark mode.
-     */
-    const toggleTheme = () => {
-      store.commit("toggleTheme");
     };
 
     /**
@@ -135,8 +110,6 @@ export default {
       filteredAndSortedProducts,
       filterByCategory,
       sortProducts,
-      theme,
-      toggleTheme,
     };
   },
 };
