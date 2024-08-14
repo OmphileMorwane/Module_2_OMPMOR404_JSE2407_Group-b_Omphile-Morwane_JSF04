@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { fetchProducts, fetchCategories} from './api';
+import { fetchProducts, fetchCategories } from './api';
 
 export default createStore({
   state: {
@@ -9,7 +9,7 @@ export default createStore({
     sortOrder: '',
     loading: true,
     error: null,
-    theme: 'light',
+    theme: localStorage.getItem('theme') || 'light', // Load theme from localStorage or default to 'light'
   },
   mutations: {
     setProducts(state, products) {
@@ -31,10 +31,12 @@ export default createStore({
       state.error = error;
     },
 
-    toggleTheme(state) {
-      state.theme = state.theme === 'light' ? 'dark' : 'light';
-    },
+    setTheme(state, newTheme) { // Updated mutation to set theme
+      state.theme = newTheme;
+      localStorage.setItem('theme', newTheme); // Save the theme to localStorage
   },
+
+},
   actions: {
     async loadProducts({ commit }) {
       try {
@@ -56,6 +58,11 @@ export default createStore({
         console.error('Error fetching categories:', error);
       }
     },
+
+    toggleTheme({ commit, state }) {
+      const newTheme = state.theme === "light" ? "dark" : "light";
+      commit("setTheme", newTheme);
+    },
   },
   getters: {
     filteredAndSortedProducts(state) {
@@ -76,9 +83,9 @@ export default createStore({
       return result;
     },
 
-    // Add getter to retrieve the current theme
+    // Getter to retrieve the current theme
     theme(state) {
       return state.theme;
+    },
   },
-},
 });
