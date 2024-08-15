@@ -58,3 +58,38 @@ export async function fetchProducts() {
         return await response.json();
       }
       
+
+      /**
+ * Authenticates a user using the fake store API.
+ *
+ * @async
+ * @function loginUser
+ * @param {string} username - The username of the user.
+ * @param {string} password - The password of the user.
+ * @returns {Promise<Object>} A promise that resolves to the authentication response, including the JWT token.
+ * @throws {Error} Throws an error if the login request fails.
+ *
+ * @example
+ * try {
+ *   const data = await loginUser('username', 'password');
+ *   console.log('Token:', data.token);
+ * } catch (error) {
+ *   console.error('Login failed:', error);
+ * }
+ */
+export async function loginUser(username, password) {
+  const response = await fetch('https://fakestoreapi.com/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Login failed');
+  }
+
+  return await response.json();
+}
