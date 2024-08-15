@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ProductList from '../components/ProductList.vue';
 import ProductDetail from '../components/ProductDetail.vue';
+import Login from '../components/Login.vue';
 
 /**
  * Array of route definitions.
@@ -17,6 +18,12 @@ const routes = [
     name: 'ProductDetail',
     component: ProductDetail,
     props: true, // Allows passing route params as props
+  },
+  
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
   },
 ];
 
