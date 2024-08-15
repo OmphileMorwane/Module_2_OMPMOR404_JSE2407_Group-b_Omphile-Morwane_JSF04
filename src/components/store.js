@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { fetchProducts, fetchCategories } from './api';
+import { fetchProducts, fetchCategories, loginUser } from './api';
 
 export default createStore({
   state: {
@@ -10,6 +10,7 @@ export default createStore({
     loading: true,
     error: null,
     theme: localStorage.getItem('theme') || 'light', // Load theme from localStorage or default to 'light'
+    isAuthenticated: false,
   },
   mutations: {
     setProducts(state, products) {
@@ -30,13 +31,14 @@ export default createStore({
     setError(state, error) {
       state.error = error;
     },
-
-    setTheme(state, newTheme) { // Updated mutation to set theme
+    setTheme(state, newTheme) {
       state.theme = newTheme;
       localStorage.setItem('theme', newTheme); // Save the theme to localStorage
+    },
+    setAuth(state, status) {
+      state.isAuthenticated = status;
+    },
   },
-
-},
   actions: {
     async loadProducts({ commit }) {
       try {
@@ -58,10 +60,37 @@ export default createStore({
         console.error('Error fetching categories:', error);
       }
     },
-
     toggleTheme({ commit, state }) {
       const newTheme = state.theme === "light" ? "dark" : "light";
       commit("setTheme", newTheme);
+    },
+    async login({ commit }, { username, password }) {
+      try {
+        const data = await loginUser(username, password);
+        commit('setAuth', true);
+        localStorage.setItem('jwt', data.token); // Store JWT
+      } catch (error) {
+        console.error('Login failed:', error);
+        commit('setError', error.message);
+      }
+    },
+    async logout({ commit }) {
+      commit('setAuth', false);
+      localStorage.removeItem('jwt'); // Remove JWT on logout
+    },
+    async checkAuth({ commit }) {
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        try {
+          // Optionally verify token with the server
+          commit('setAuth', true);
+        } catch (error) {
+          commit('setAuth', false);
+          console.error('Token validation failed:', error);
+        }
+      } else {
+        commit('setAuth', false);
+      }
     },
   },
   getters: {
@@ -82,8 +111,6 @@ export default createStore({
 
       return result;
     },
-
-    // Getter to retrieve the current theme
     theme(state) {
       return state.theme;
     },
