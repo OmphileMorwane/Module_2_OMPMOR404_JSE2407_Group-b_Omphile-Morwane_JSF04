@@ -39,13 +39,16 @@
           id="navbar-dropdown"
         >
           <ul class="navbar-list">
+            <!-- Conditional rendering for cart and wishlist -->
             <li>
-              <RouterLink to="/wishlist" class="navbar-item">Wishlist</RouterLink>
+              <RouterLink to="/wishlist" class="navbar-item" @click.prevent="redirectToLoginIfNotAuthenticated('/wishlist')">
+                Wishlist
+              </RouterLink>
             </li>
-            <li class="navbar-cart">
-              <RouterLink to="/cart" class="navbar-item">
+            <li>
+              <RouterLink to="/cart" class="navbar-item" @click.prevent="redirectToLoginIfNotAuthenticated('/cart')">
                 <div class="cart-notification">
-                  <p class="cart-count">2</p>
+                  <p class="cart-count">{{ cartItemCount }}</p>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -64,10 +67,10 @@
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/cart" class="navbar-item cart-mobile">Cart</RouterLink>
-            </li>
-            <li>
-              <RouterLink to="/login" class="navbar-item">Login</RouterLink>
+              <!-- Show login or logout based on authentication status -->
+              <button @click="isAuthenticated ? logout() : redirectToLogin()" class="navbar-item">
+                {{ isAuthenticated ? "Logout" : "Login" }}
+              </button>
             </li>
           </ul>
         </div>
@@ -77,19 +80,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 const navbarOpen = ref(false);
+const store = useStore();
+const router = useRouter();
 
-/**
- * Toggles the visibility of the navbar.
- * @returns {void}
- */
+const isAuthenticated = computed(() => store.state.isAuthenticated);
+
+// Define computed property to get cartItemCount from Vuex store
+const cartItemCount = computed(() => store.getters.cartItemCount);
+
 function toggleNavbar() {
   navbarOpen.value = !navbarOpen.value;
-  console.log("Navbar Open:", navbarOpen.value);
 }
 
+function logout() {
+  store.dispatch('logout'); // Call logout action
+  router.push('/'); // Redirect to home or any other page after logout
+}
+
+function redirectToLogin() {
+  router.push('/login'); // Redirect to the login page
+}
+
+// Check authentication and redirect
+function redirectToLoginIfNotAuthenticated(destination) {
+  if (!isAuthenticated.value) {
+    router.push({ path: '/login', query: { redirect: destination } });
+  } else {
+    router.push(destination);
+  }
+}
 </script>
+
+
+
 
