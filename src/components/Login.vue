@@ -62,19 +62,59 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { loginUser } from './api'; // Import the loginUser function
 
+/**
+ * The username entered by the user.
+ * @type {Ref<string>}
+ */
 const username = ref('');
+
+/**
+ * The password entered by the user.
+ * @type {Ref<string>}
+ */
 const password = ref('');
+
+/**
+ * A boolean indicating whether the password input is visible or hidden.
+ * @type {Ref<boolean>}
+ */
 const passwordVisible = ref(false);
+
+/**
+ * A boolean indicating whether the login request is in progress.
+ * @type {Ref<boolean>}
+ */
 const isLoading = ref(false);
+
+/**
+ * The error message to display if login fails.
+ * @type {Ref<string>}
+ */
 const errorMessage = ref('');
+
+/**
+ * The Vue Router instance used for navigation.
+ * @type {Router}
+ */
 const router = useRouter();
+
+/**
+ * The Vuex store instance used to manage authentication state.
+ * @type {Store}
+ */
 const store = useStore();
 
-// Method to toggle password visibility
+/**
+ * Toggles the visibility of the password input.
+ */
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
+/**
+ * Handles the login process by validating input and calling the API.
+ * Redirects to the intended page or home if login is successful.
+ */
 const handleLogin = async () => {
   if (!username.value || !password.value) {
     errorMessage.value = 'Username and password are required';
@@ -134,4 +174,3 @@ const handleLogin = async () => {
   color: #000;
 }
 </style>
-

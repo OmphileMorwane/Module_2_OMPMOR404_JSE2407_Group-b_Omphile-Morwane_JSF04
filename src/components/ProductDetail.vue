@@ -54,12 +54,36 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { fetchProduct } from "./api";
 
+// Reactive reference to hold the product data
+/**
+ * @type {Ref<Product|null>}
+ */
 const product = ref(null);
+
+// Reactive reference to indicate loading state
+/**
+ * @type {Ref<boolean>}
+ */
 const loading = ref(true);
+
+// Route object to access route parameters
+/**
+ * @type {Route}
+ */
 const route = useRoute();
+
+// Vuex store instance
+/**
+ * @type {Store}
+ */
 const store = useStore();
 
-// Load product details
+/**
+ * Asynchronous function to load product details from the API.
+ * Fetches the product using the product ID from the route parameters.
+ * Sets the product data and updates the loading state.
+ * Logs an error if the fetch fails.
+ */
 const loadProduct = async () => {
   const id = route.params.id;
   try {
@@ -71,14 +95,21 @@ const loadProduct = async () => {
   }
 };
 
-// Check if product is in wishlist
+/**
+ * Computed property to check if the product is in the user's wishlist.
+ * @type {ComputedRef<boolean>}
+ */
 const isInWishlist = computed(() => {
   return product.value
     ? store.getters.isProductInWishlist(product.value.id)
     : false;
 });
 
-// Toggle wishlist state
+/**
+ * Function to toggle the product's wishlist state.
+ * Adds the product to the wishlist if not already present,
+ * or removes it if it is present.
+ */
 const toggleWishlist = () => {
   if (product.value) {
     if (isInWishlist.value) {
@@ -89,11 +120,8 @@ const toggleWishlist = () => {
   }
 };
 
+// Load product details when the component is mounted
 onMounted(() => {
   loadProduct();
 });
 </script>
-
-<style scoped>
-/* Your CSS styling here */
-</style>

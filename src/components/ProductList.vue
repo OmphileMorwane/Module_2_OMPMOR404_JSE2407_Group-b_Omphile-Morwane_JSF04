@@ -68,34 +68,65 @@ export default {
    */
   setup() {
     const store = useStore();
+    
     // Reactive computed properties for categories, loading state, selected category, and sort order.
+    /**
+     * Computed property for product categories from the Vuex store.
+     * @type {ComputedRef<string[]>}
+     */
     const categories = computed(() => store.state.categories);
+
+    /**
+     * Computed property for loading state from the Vuex store.
+     * @type {ComputedRef<boolean>}
+     */
     const loading = computed(() => store.state.loading);
+
+    /**
+     * Computed property for the selected category, with getter and setter for Vuex state.
+     * @type {ComputedRef<string>}
+     */
     const selectedCategory = computed({
       get: () => store.state.selectedCategory,
       set: (value) => store.commit("setSelectedCategory", value),
     });
+
+    /**
+     * Computed property for the sort order, with getter and setter for Vuex state.
+     * @type {ComputedRef<string>}
+     */
     const sortOrder = computed({
       get: () => store.state.sortOrder,
       set: (value) => store.commit("setSortOrder", value),
     });
+
+    /**
+     * Computed property for filtered and sorted products from the Vuex store.
+     * @type {ComputedRef<Product[]>}
+     */
     const filteredAndSortedProducts = computed(
       () => store.getters.filteredAndSortedProducts
     );
 
     /**
-     * Filters the products by the selected category.
+     * Function to filter products based on the selected category.
+     * This function is triggered when the category dropdown value changes.
      */
     const filterByCategory = () => {
       // No need to update the state here as v-model does that
     };
 
+    /**
+     * Function to sort products based on the selected sort order.
+     * This function is triggered when the sort order dropdown value changes.
+     */
     const sortProducts = () => {
       // No need to update the state here as v-model does that
     };
 
     /**
-     * Sorts the products by the selected sort order.
+     * Lifecycle hook that runs when the component is mounted.
+     * Loads products and categories from the Vuex store.
      */
     onMounted(() => {
       store.dispatch("loadProducts");

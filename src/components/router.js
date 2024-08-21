@@ -28,6 +28,13 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: Cart,
+    /**
+     * Navigation guard for the Cart route.
+     * Redirects to the Login route if the user is not authenticated.
+     * @param {Route} to - The target Route Object being navigated to.
+     * @param {Route} from - The current Route Object being navigated away from.
+     * @param {Function} next - Function to call to resolve the navigation.
+     */
     beforeEnter: (to, from, next) => {
       if (!store.state.isAuthenticated) {
         next({ name: 'Login', query: { redirect: to.fullPath } });
@@ -40,6 +47,13 @@ const routes = [
     path: '/comparison',
     name: 'ComparisonPage',
     component: ComparisonPage,
+    /**
+     * Navigation guard for the ComparisonPage route.
+     * Redirects to the Login route if the user is not authenticated.
+     * @param {Route} to - The target Route Object being navigated to.
+     * @param {Route} from - The current Route Object being navigated away from.
+     * @param {Function} next - Function to call to resolve the navigation.
+     */
     beforeEnter: (to, from, next) => {
       if (!store.state.isAuthenticated) {
         next({ name: 'Login', query: { redirect: to.fullPath } });
@@ -52,6 +66,13 @@ const routes = [
     path: '/wishlist',
     name: 'Wishlist',
     component: Wishlist,
+    /**
+     * Navigation guard for the Wishlist route.
+     * Redirects to the Login route if the user is not authenticated.
+     * @param {Route} to - The target Route Object being navigated to.
+     * @param {Route} from - The current Route Object being navigated away from.
+     * @param {Function} next - Function to call to resolve the navigation.
+     */
     beforeEnter: (to, from, next) => {
       if (!store.state.isAuthenticated) {
         next({ name: 'Login', query: { redirect: to.fullPath } });
@@ -61,6 +82,7 @@ const routes = [
     },
   },
 ];
+
 /**
  * Creates a new Vue Router instance.
  * @returns {Router} The Vue Router instance.
@@ -70,8 +92,14 @@ const router = createRouter({
   routes,
 });
 
+/**
+ * Global navigation guard to handle route protection.
+ * Redirects to the Login route if authentication is required and the user is not authenticated.
+ * @param {Route} to - The target Route Object being navigated to.
+ * @param {Route} from - The current Route Object being navigated away from.
+ * @param {Function} next - Function to call to resolve the navigation.
+ */
 router.beforeEach((to, from, next) => {
-  // Global navigation guard to handle route protection
   const isAuthenticated = store.state.isAuthenticated;
   const requiresAuth = to.meta.requiresAuth;
 

@@ -63,6 +63,17 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 // Props definition
+/**
+ * The product object that contains details about the product.
+ * @type {Object}
+ * @property {string} id - The unique identifier for the product.
+ * @property {string} title - The title of the product.
+ * @property {string} image - The URL of the product image.
+ * @property {number} price - The price of the product.
+ * @property {string} category - The category of the product.
+ * @property {Object} rating - The rating information of the product.
+ * @property {number} rating.rate - The average rating of the product.
+ */
 const props = defineProps({
   product: {
     type: Object,
@@ -72,31 +83,50 @@ const props = defineProps({
 
 const store = useStore();
 
-// Compute if the product is added to the cart
+/**
+ * Computed property to check if the product is already added to the cart.
+ * @type {ComputedRef<boolean>}
+ */
 const isAddedToCart = computed(() => {
   return store.state.cart.some(
     (item) => item.id === props.product.id && item.userId === store.state.userId
   );
 });
 
-// Total number of stars for the rating
+/**
+ * The total number of stars used for rating display.
+ * @type {number}
+ */
 const totalStars = 5;
+
+/**
+ * Computed property to determine the number of filled stars based on the product rating.
+ * @type {ComputedRef<number>}
+ */
 const filledStarsCount = computed(() => Math.round(props.product.rating.rate));
 
-// Add to cart functionality
+/**
+ * Function to add the product to the cart if it is not already added and the user is authenticated.
+ */
 const addToCart = () => {
   if (!isAddedToCart.value && store.state.isAuthenticated) {
     store.dispatch("addToCart", { ...props.product, quantity: 1 });
   }
 };
 
-// Wishlist management
-// Check if the product is in the wishlist
+/**
+ * Computed property to check if the product is in the user's wishlist.
+ * @type {ComputedRef<boolean>}
+ */
 const isInWishlist = computed(() =>
   store.getters.isProductInWishlist(props.product.id)
 );
 
-// Toggle the wishlist state
+/**
+ * Function to toggle the wishlist state for the product.
+ * Adds the product to the wishlist if it is not already there, or removes it if it is.
+ * @param {Object} product - The product object to toggle.
+ */
 function toggleWishlist(product) {
   if (isInWishlist.value) {
     store.dispatch("removeFromWishlist", product.id);
@@ -105,7 +135,10 @@ function toggleWishlist(product) {
   }
 }
 
-// Comparison functionality
+/**
+ * Function to add the product to the comparison list.
+ * Logs a message on success or error if the addition fails.
+ */
 const addToCompare = () => {
   store
     .dispatch("addToComparison", props.product)
