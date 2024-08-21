@@ -6,7 +6,7 @@
           <img
             src="/src/assets/online-shop.png"
             class="logo-img"
-            alt="Flowbite Logo"
+            alt="SwiftCart Logo"
           />
           <span class="logo-text">SwiftCart</span>
         </RouterLink>
@@ -15,7 +15,7 @@
           type="button"
           class="menu-button"
           aria-controls="navbar-dropdown"
-          aria-expanded="false"
+          aria-expanded="navbarOpen"
         >
           <svg
             class="menu-icon"
@@ -41,12 +41,23 @@
           <ul class="navbar-list">
             <!-- Conditional rendering for cart and wishlist -->
             <li>
-              <RouterLink to="/wishlist" class="navbar-item" @click.prevent="redirectToLoginIfNotAuthenticated('/wishlist')">
+              <RouterLink
+                to="/wishlist"
+                class="navbar-item"
+                @click.prevent="redirectToLoginIfNotAuthenticated('/wishlist')"
+              >
+                <div class="wishlist-notification">
+                  <p class="wishlist-count">{{ wishlistItemCount }}</p>
+                </div>
                 Wishlist
               </RouterLink>
             </li>
             <li>
-              <RouterLink to="/cart" class="navbar-item" @click.prevent="redirectToLoginIfNotAuthenticated('/cart')">
+              <RouterLink
+                to="/cart"
+                class="navbar-item"
+                @click.prevent="redirectToLoginIfNotAuthenticated('/cart')"
+              >
                 <div class="cart-notification">
                   <p class="cart-count">{{ cartItemCount }}</p>
                 </div>
@@ -67,22 +78,39 @@
               </RouterLink>
             </li>
             <li>
-              <!-- Show login or logout based on authentication status -->
-              <button @click="isAuthenticated ? logout() : redirectToLogin()" class="navbar-item">
-                {{ isAuthenticated ? "Logout" : "Login" }}
-              </button>
+              <RouterLink
+                to="/comparison"
+                class="navbar-item"
+                @click.prevent="
+                  redirectToLoginIfNotAuthenticated('/comparison')
+                "
+              >
+                <div class="compare-notification">
+                  <p class="compare-count">{{ comparisonCount }}</p>
+                </div>
+                Compare Products
+              </RouterLink>
             </li>
           </ul>
         </div>
+        <li class="login">
+          <!-- Show login or logout based on authentication status -->
+          <button
+            @click="isAuthenticated ? logout() : redirectToLogin()"
+            class="navbar-item"
+          >
+            {{ isAuthenticated ? "Logout" : "Login" }}
+          </button>
+        </li>
       </div>
     </nav>
   </header>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 const navbarOpen = ref(false);
 const store = useStore();
@@ -90,32 +118,28 @@ const router = useRouter();
 
 const isAuthenticated = computed(() => store.state.isAuthenticated);
 
-// Define computed property to get cartItemCount from Vuex store
 const cartItemCount = computed(() => store.getters.cartItemCount);
+const wishlistItemCount = computed(() => store.getters.wishlistItemCount);
+const comparisonCount = computed(() => store.getters.comparisonListCount);
 
 function toggleNavbar() {
   navbarOpen.value = !navbarOpen.value;
 }
 
 function logout() {
-  store.dispatch('logout'); // Call logout action
-  router.push('/'); // Redirect to home or any other page after logout
+  store.dispatch("logout");
+  router.push("/");
 }
 
 function redirectToLogin() {
-  router.push('/login'); // Redirect to the login page
+  router.push("/login");
 }
 
-// Check authentication and redirect
 function redirectToLoginIfNotAuthenticated(destination) {
   if (!isAuthenticated.value) {
-    router.push({ path: '/login', query: { redirect: destination } });
+    router.push({ path: "/login", query: { redirect: destination } });
   } else {
     router.push(destination);
   }
 }
 </script>
-
-
-
-
