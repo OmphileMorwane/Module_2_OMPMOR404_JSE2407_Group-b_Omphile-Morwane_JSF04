@@ -95,3 +95,6 @@ To set up the project locally, follow these steps:
    then
    - npm run dev
    ```
+
+
+Video presentation link: https://youtu.be/GNHU56MUm-M
