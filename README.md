@@ -96,5 +96,6 @@ To set up the project locally, follow these steps:
    - npm run dev
    ```
 
-
 Video presentation link: https://youtu.be/GNHU56MUm-M
+
+Netlify link: https://swiftcart-e-commerce.netlify.app/
