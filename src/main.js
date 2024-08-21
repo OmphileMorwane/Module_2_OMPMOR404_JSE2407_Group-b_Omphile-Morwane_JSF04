@@ -16,6 +16,12 @@ if (savedCart) {
   savedCart.forEach((item) => store.dispatch("addToCart", item));
 }
 
+// Restore wishlist from localStorage if it exists
+const savedWishlist = JSON.parse(localStorage.getItem("wishlist"));
+if (savedWishlist) {
+  store.dispatch("addToWishlist", savedWishlist);
+}
+
 /**
  * Uses the Vue Router for the application.
  */
