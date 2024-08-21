@@ -35,20 +35,50 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 
+/**
+ * Provides access to Vuex store.
+ */
 const store = useStore();
+
+/**
+ * Computed property for cart items.
+ * @returns {Array} List of cart items.
+ */
 const cartItems = computed(() => store.getters.cartItems);
+
+/**
+ * Computed property for total number of cart items.
+ * @returns {Number} Total number of items in the cart.
+ */
 const cartItemCount = computed(() => store.getters.cartItemCount);
+
+/**
+ * Computed property for the total cost of items in the cart.
+ * @returns {String} Total cost formatted as a string.
+ */
 const cartTotalCost = computed(() => store.getters.cartTotalCost);
 
+/**
+ * Removes an item from the cart.
+ * @param {Number} itemId - The ID of the item to remove.
+ */
 const removeItem = (itemId) => {
   store.dispatch("removeFromCart", itemId);
 };
 
+/**
+ * Increases the quantity of a specific item in the cart.
+ * @param {Number} itemId - The ID of the item to update.
+ */
 const increaseQuantity = (itemId) => {
   const item = cartItems.value.find((item) => item.id === itemId);
   store.dispatch("updateCartQuantity", { itemId, quantity: item.quantity + 1 });
 };
 
+/**
+ * Decreases the quantity of a specific item in the cart.
+ * @param {Number} itemId - The ID of the item to update.
+ */
 const decreaseQuantity = (itemId) => {
   const item = cartItems.value.find((item) => item.id === itemId);
   if (item.quantity > 1) {
@@ -59,6 +89,9 @@ const decreaseQuantity = (itemId) => {
   }
 };
 
+/**
+ * Clears all items from the cart.
+ */
 const clearCart = () => {
   store.dispatch("clearCart");
 };
@@ -181,4 +214,3 @@ h2 {
   background-color: #c82333;
 }
 </style>
-

@@ -134,7 +134,6 @@ export default createStore({
     },
   },
 
-
   actions: {
     async loadProducts({ commit }) {
       try {
@@ -242,16 +241,17 @@ export default createStore({
       if (!state.isAuthenticated) {
         return; // Prevent adding to cart if not logged in
       }
-      const productWithQuantity = { ...product, quantity: 1, userId: state.userId };
+      const productWithQuantity = {
+        ...product,
+        quantity: 1,
+        userId: state.userId,
+      };
       commit("addToCart", productWithQuantity);
-  
+
       // Remove from wishlist after adding to cart
       commit("removeFromWishlist", product.id);
     },
   },
-
-
-
 
   getters: {
     filteredAndSortedProducts(state) {
