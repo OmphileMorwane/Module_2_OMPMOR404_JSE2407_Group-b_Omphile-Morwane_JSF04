@@ -99,3 +99,7 @@ To set up the project locally, follow these steps:
 Video presentation link: https://youtu.be/GNHU56MUm-M
 
 Netlify link: https://swiftcart-e-commerce.netlify.app/
+
+- ** Use the credentials to log into the App**
+
+![Log in Credentials](./src/Images/LogInCred.png)
