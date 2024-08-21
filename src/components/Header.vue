@@ -112,29 +112,75 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
+/**
+ * A reactive reference that indicates whether the navbar is open or closed.
+ * @type {Ref<boolean>}
+ */
 const navbarOpen = ref(false);
+
+/**
+ * The Vuex store instance used to access state and dispatch actions.
+ * @type {Store}
+ */
 const store = useStore();
+
+/**
+ * The Vue Router instance used to navigate programmatically.
+ * @type {Router}
+ */
 const router = useRouter();
 
+/**
+ * A computed property that returns the authentication status of the user.
+ * @type {ComputedRef<boolean>}
+ */
 const isAuthenticated = computed(() => store.state.isAuthenticated);
 
+/**
+ * A computed property that returns the number of items in the cart.
+ * @type {ComputedRef<number>}
+ */
 const cartItemCount = computed(() => store.getters.cartItemCount);
+
+/**
+ * A computed property that returns the number of items in the wishlist.
+ * @type {ComputedRef<number>}
+ */
 const wishlistItemCount = computed(() => store.getters.wishlistItemCount);
+
+/**
+ * A computed property that returns the number of items in the comparison list.
+ * @type {ComputedRef<number>}
+ */
 const comparisonCount = computed(() => store.getters.comparisonListCount);
 
+/**
+ * Toggles the visibility of the navbar.
+ */
 function toggleNavbar() {
   navbarOpen.value = !navbarOpen.value;
 }
 
+/**
+ * Logs out the user and redirects them to the home page.
+ */
 function logout() {
   store.dispatch("logout");
   router.push("/");
 }
 
+/**
+ * Redirects the user to the login page.
+ */
 function redirectToLogin() {
   router.push("/login");
 }
 
+/**
+ * Redirects the user to the login page if they are not authenticated.
+ * Otherwise, redirects them to the specified destination.
+ * @param {string} destination - The path to redirect to if authenticated.
+ */
 function redirectToLoginIfNotAuthenticated(destination) {
   if (!isAuthenticated.value) {
     router.push({ path: "/login", query: { redirect: destination } });
