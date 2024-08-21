@@ -1,6 +1,6 @@
 <template>
         <div class="comparison-page">
-          <h1>Comparison List</h1>
+          <h1>Compare Products</h1>
           <table v-if="comparisonList.length > 0">
             <thead>
               <tr>
@@ -76,6 +76,7 @@
       table {
         width: 100%;
         border-collapse: collapse;
+        background-color: white;
       }
       
       th, td {
