@@ -9,8 +9,7 @@
       <div class="skeleton-category"></div>
       <div class="skeleton-rating"></div>
     </div>
-    <!--Actual content-->
-
+    <!-- Actual content -->
     <div v-else-if="product" class="product-detail">
       <img :src="product.image" :alt="product.title" class="image" />
       <h1>{{ product.title }}</h1>
@@ -27,41 +26,40 @@
           <span class="reviews-value">{{ product.rating.count }}</span>
         </div>
       </div>
+      <!-- Added to Wishlist Button -->
+      <svg
+        class="heart-icon"
+        :class="{ active: isInWishlist }"
+        @click="toggleWishlist"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+        />
+      </svg>
       <div class="back-link">
-        <router-link class="back-link-anchor" to="/">Back to products</router-link>
+        <router-link class="back-link-anchor" to="/"
+          >Back to products</router-link
+        >
       </div>
     </div>
   </main>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import { fetchProduct } from "./api";
 
-/**
- * Reactive reference to store the product details.
- * @type {Object|null}
- */
 const product = ref(null);
-
-/**
- * Reactive reference to manage loading state.
- * @type {boolean}
- */
 const loading = ref(true);
-
-/**
- * Vue Router's useRoute function to get the current route object.
- * @type {Object}
- */
 const route = useRoute();
+const store = useStore();
 
-/**
- * Asynchronous function to load product details from the API.
- * It fetches the product data based on the product ID from the route parameters.
- * @returns {Promise<void>}
- */
+// Load product details
 const loadProduct = async () => {
   const id = route.params.id;
   try {
@@ -73,12 +71,29 @@ const loadProduct = async () => {
   }
 };
 
-/**
- * Lifecycle hook that runs when the component is mounted.
- * It calls the loadProduct function to fetch and display the product details.
- */
+// Check if product is in wishlist
+const isInWishlist = computed(() => {
+  return product.value
+    ? store.getters.isProductInWishlist(product.value.id)
+    : false;
+});
+
+// Toggle wishlist state
+const toggleWishlist = () => {
+  if (product.value) {
+    if (isInWishlist.value) {
+      store.dispatch("removeFromWishlist", product.value.id);
+    } else {
+      store.dispatch("addToWishlist", product.value);
+    }
+  }
+};
+
 onMounted(() => {
   loadProduct();
 });
 </script>
 
+<style scoped>
+/* Your CSS styling here */
+</style>
